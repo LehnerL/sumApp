@@ -71,7 +71,7 @@ def end_timer(suffix = None):
     return evalTime
 
 API_URL = "https://api-inference.huggingface.co/models/sshleifer/distilbart-cnn-12-6"
-headers = {"Authorization": api_key}
+headers = {"Authorization": config.api_key}
 
 def query(payload):
 	response = requests.post(API_URL, headers=headers, json=payload)
