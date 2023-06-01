@@ -1,7 +1,7 @@
 ﻿import base64
 from bs4 import BeautifulSoup
 import datetime
-#import docx2txt
+import docx2txt
 from io import StringIO
 import os
 from PIL import Image
@@ -82,7 +82,11 @@ if uploaded_file is not None:
     text = docx2txt.process(uploaded_file)
     output_doc = query(text)
     st.write(output_doc)
-
+    time = end_timer()
+    collection.insert_one({'name': str(uploaded_file), 'summary': output_doc[0]['summary_text'], 'timer': time, 'date': datetime.datetime.now()})
+    with open("my_file.txt", 'w') as my_data:
+           my_data.write(str(output_doc[0]['summary_text']))
+    st.markdown(get_binary_file_downloader_html('my_file.txt', 'summary'), unsafe_allow_html=True)
 
 if st.button("Summarize"): 
     txt = article.strip()
@@ -140,14 +144,14 @@ if st.button("Summarize"):
                 my_data.write(my_raw_data)
 
             open_pdf_file = open("my_pdf.pdf", 'rb')
-            read_pdf = PyPDF2.PdfFileReader(open_pdf_file)
-            if read_pdf.isEncrypted:
+            read_pdf = PyPDF2.PdfReader(open_pdf_file)
+            if read_pdf.is_encrypted:
                 read_pdf.decrypt("")
-                print(read_pdf.getPage(0).extractText())
-                ARTICLE = read_pdf.getPage(0).extractText()
+                #print(read_pdf.pages[0].extract_text())
+                ARTICLE = read_pdf.pages[0].extract_text()
             else:
-                print(read_pdf.getPage(0).extractText())
-                ARTICLE = read_pdf.getPage(0).extractText()
+                print(read_pdf.pages[0].extract_text())
+                ARTICLE = read_pdf.pages[0].extract_text()
 
         ARTICLE = parse(ARTICLE)
 ###        
@@ -158,7 +162,9 @@ if st.button("Summarize"):
            my_data.write(str(output[0]['summary_text']))       
 
     else:
-        txt = parse()      
+        txt = parse(article)
+        starturl = article[:10]
+        
 #        
         output = query(txt)
         for value in output:
@@ -173,3 +179,4 @@ if st.button("Summarize"):
     time = end_timer()
     if output:
             collection.insert_one({'name': starturl, 'summary': output[0]['summary_text'], 'timer': time, 'date': datetime.datetime.now()})
+       

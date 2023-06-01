@@ -40,7 +40,7 @@ This program works only with relevant input: links to article-based pages (HTML,
 
 Run
 
-> C:\Users\L\Desktop\fin_pro\sumApp\sumApp\sum_env\Scripts
+> cd C:\Users\L\Desktop\fin_pro\sumApp\sumApp\sum_env\Scripts
 > streamlit run C:\Users\L\Desktop\fin_pro\sumApp\sumApp\sumApp.py [ARGUMENTS]
 
 Licensing Information
